@@ -4,7 +4,7 @@ export class Comment {
   user :User;
   message: string;
   date: number;
-  key?: string;
+  key: any;
   isEdit: boolean | undefined;
 
   constructor(value:any) {

@@ -17,7 +17,7 @@
               <h4 class="media-heading">{{ comment.user.name }}
                 <ng-container *ngIf="comment.user.uid === currentUser.uid">
                   <i class="fa fa-edit ml-2" title="編集" (click)="comment.isEdit = !comment.isEdit"></i>
-                  <i class="fa fa-trash ml-2" title="削除"></i>
+                  <i class="fa fa-trash ml-2" title="削除" (click)="deleteComment(comment)"></i>
                 </ng-container>
               </h4>
               <small class="media-date">{{ comment.date | commentDate }}</small>
@@ -30,8 +30,8 @@
                 <textarea [(ngModel)]="comment.message" name="edit-comment" class="form-control"></textarea>
               </div>
               <div class="edit-buttons">
-                <button class="btn btn-success btn-sm">保存</button>
-                <button class="btn btn-warning btn-sm">キャンセル</button>
+                <button class="btn btn-success btn-sm" (click)="updateComment(comment)">保存</button>
+                <button class="btn btn-warning btn-sm" (click)="comment.isEdit = false">キャンセル</button>
               </div>
             </ng-container>
           </div>

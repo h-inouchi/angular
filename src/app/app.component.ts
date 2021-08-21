@@ -44,4 +44,14 @@ export class AppComponent {
       this.comment = '';
     }
   }
+
+  updateComment(comment: Comment):void {
+    const { key, message } = comment;
+
+    this.commentsRef.update(key, { message });
+  }
+
+  deleteComment(comment: Comment):void {
+    this.commentsRef.remove(comment.key);
+  }
 }
