@@ -8,11 +8,13 @@ import { CommentDatePipe } from './pipes/comment-date.pipe';
 import { environment } from '../environments/environment';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CommentDatePipe
+    CommentDatePipe,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
