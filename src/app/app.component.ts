@@ -3,17 +3,11 @@ import { Component } from '@angular/core';
 import { Comment } from './class/comment';
 import { User } from './class/user';
 import { Observable } from 'rxjs';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabase, AngularFireList, SnapshotAction } from '@angular/fire/database';
+import { map } from 'rxjs/operators';
 
 const CURRENT_USER:User = new User(1, '井内　はじめ');
 const ANOTHER_USER:User = new User(2, '竹井　賢治');
-
-const COMMENTS: Comment[] = [
-  new Comment(ANOTHER_USER, 'お疲れ様です！'),
-  new Comment(ANOTHER_USER, 'このあいだの件ですが、どうなりましたか？'),
-  new Comment(CURRENT_USER, 'あーあれですか'),
-  new Comment(CURRENT_USER, 'OKでました'),
-]
 
 @Component({
   selector: 'ac-root',
@@ -21,18 +15,33 @@ const COMMENTS: Comment[] = [
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  comments = COMMENTS;
+  comments$: Observable<Comment[]>;
+  commentsRef: AngularFireList<Comment>;
   currentUser = CURRENT_USER;
   comment = '';
   item$: Observable<any>;
 
   constructor(private db: AngularFireDatabase) {
     this.item$ = db.object('/item').valueChanges();
+    this.commentsRef = db.list('/comments');
+    this.comments$ = this.commentsRef.snapshotChanges()
+      .pipe(
+        map((snapshots: SnapshotAction<Comment>[]) => {
+          return snapshots.map(snapshot => {
+            const value = snapshot.payload.val();
+            return new Comment({ key: snapshot.payload.key, ...value });
+          })
+        })
+      )
   }
 
   addComment(comment: string): void {
     if (comment) {
-      this.comments.push(new Comment(this.currentUser, comment));
+      this.commentsRef.push(new Comment({
+        user: this.currentUser,
+        message: comment
+      }));
+      this.comment = '';
     }
   }
 }
