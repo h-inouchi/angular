@@ -5,7 +5,7 @@ export class User {
   uid: string | undefined;
   initial: string | undefined;
 
-  constructor(user: firebase.User | null) {
+  constructor(user: User | firebase.User | null) {
     this.uid = user?.uid;
     this.displayName = user?.displayName;
     this.email = user?.email;
